@@ -1,30 +1,29 @@
-사용자가 지정한 세션 파일을 불러와 내용을 보여주세요.
+Load and display a specific session file.
 
-## 입력값
-`$ARGUMENTS` — 불러올 파일명 (예: `2025-03-06_14-30-00` 또는 `2025-03-06_14-30-00.md`)
+## Input
+`$ARGUMENTS` — filename to load (e.g., `2025-03-06_14-30-00` or `2025-03-06_14-30-00.md`)
 
-## 실행 순서
+## Steps
 
-1. `$ARGUMENTS`가 비어있으면 사용 가능한 세션 목록을 보여주세요:
+1. If `$ARGUMENTS` is empty, show the list of available sessions:
    ```bash
    ls session-memories/*.md 2>/dev/null | grep -v forever.md | sort -r
    ```
-   그리고 "파일명을 입력해주세요. 예: `/remind-custom 2025-03-06_14-30-00`" 라고 안내하세요.
+   Then say "Please provide a filename. Example: `/remind-custom 2025-03-06_14-30-00`"
 
-2. `$ARGUMENTS`에서 `.md` 확장자가 없으면 붙여서 경로를 완성하세요:
-   `session-memories/{파일명}.md`
+2. If `$ARGUMENTS` doesn't have the `.md` extension, append it:
+   `session-memories/{filename}.md`
 
-3. 해당 파일이 존재하는지 확인하세요.
-   없으면 "해당 파일을 찾을 수 없습니다: {파일명}" 이라고 알리고,
-   현재 존재하는 세션 파일 목록을 출력하세요.
+3. Check if the file exists.
+   If not, say "File not found: {filename}" and list the available session files.
 
-4. 파일을 읽어서 전체 내용을 보여주세요.
+4. Read and display the full contents of the file.
 
-5. `session-memories/forever.md`가 있으면 구분선 후에 함께 출력하세요:
+5. If `session-memories/forever.md` exists, display it after a separator:
    ```
    ---
-   ## 📌 항상 기억할 사항 (forever.md)
-   {forever.md 내용}
+   ## Permanent Notes (forever.md)
+   {forever.md contents}
    ```
 
-6. "'{파일명}' 세션을 불러왔습니다." 라고 마무리하세요.
+6. End with "Session '{filename}' loaded."

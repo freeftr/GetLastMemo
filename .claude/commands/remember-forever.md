@@ -1,29 +1,29 @@
-사용자가 입력한 내용을 session-memories/forever.md에 누적 저장하세요. 이 파일은 만료되지 않으며 모든 세션에서 항상 참조됩니다.
+Append the user's input to session-memories/forever.md. This file never expires and is referenced in every session.
 
-## 입력값
-`$ARGUMENTS` — 영구적으로 기억할 내용
+## Input
+`$ARGUMENTS` — content to remember permanently
 
-## 실행 순서
+## Steps
 
-1. `$ARGUMENTS`가 비어있으면 현재 `forever.md` 내용을 보여주고 "기억할 내용을 입력해주세요. 예: `/remember-forever 항상 TypeScript strict 모드 사용`" 라고 안내하세요.
+1. If `$ARGUMENTS` is empty, show the current contents of `forever.md` and say "Please provide content to remember. Example: `/remember-forever Always use TypeScript strict mode`"
 
-2. `session-memories/` 디렉토리가 없으면 "아직 세션 기록이 없습니다. `/save-session`으로 먼저 세션을 저장해주세요." 라고 안내하고 종료하세요.
+2. If the `session-memories/` directory doesn't exist, say "No session history yet. Please run `/save-session` first." and stop.
 
-3. `session-memories/forever.md`가 없으면 아래 헤더로 새로 생성하세요:
+3. If `session-memories/forever.md` doesn't exist, create it with this header:
    ```markdown
-   # 📌 항상 기억할 사항
-   > 이 파일은 만료되지 않습니다. 모든 세션에서 참조됩니다.
+   # Permanent Notes
+   > This file never expires. Referenced in every session.
 
    ---
    ```
 
-4. 현재 날짜/시각과 함께 내용을 파일 끝에 추가하세요:
+4. Append the content with the current date/time:
    ```markdown
-   ### {YYYY-MM-DD HH:MM} 추가
-   {$ARGUMENTS 내용}
+   ### Added {YYYY-MM-DD HH:MM}
+   {$ARGUMENTS content}
 
    ```
 
-5. 저장 후 `forever.md` 전체 내용을 출력해서 현재까지 누적된 항목을 확인시켜주세요.
+5. Display the full contents of `forever.md` to confirm all accumulated entries.
 
-6. "영구 기억에 추가되었습니다. 앞으로 모든 세션에서 이 내용을 참고할게요!" 라고 마무리하세요.
+6. End with "Added to permanent memory. This will be referenced in all future sessions."

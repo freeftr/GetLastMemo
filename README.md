@@ -1,27 +1,27 @@
-# 🧠 session-memory-for-claude
+# session-memory-for-claude
 
-> Claude Code(클로드 코드)에서 LLM 코딩 세션의 기억을 저장하고 복원하는 슬래시커맨드 도구
+> Save and restore Claude Code session memory across conversations using slash commands
 
-CLI에서 Claude Code로 코딩하다 보면 세션이 닫히면 이전 컨텍스트가 사라지는 문제가 있습니다.  
-이 도구는 **세션의 진행 상황, 할 일, 핵심 정보를 마크다운으로 저장**하고, 다음 세션에서 바로 불러올 수 있게 해줍니다.
-
----
-
-## ✨ 기능
-
-| 커맨드 | 설명 |
-|--------|------|
-| `/save-session` | 현재 세션을 마크다운 파일로 저장 |
-| `/remind-last-session` | 가장 최근 세션 기억 불러오기 |
-| `/remind-custom [파일명]` | 특정 세션 파일 지정해서 불러오기 |
-| `/remember-forever [내용]` | 모든 세션에서 항상 참조할 항목 누적 저장 |
-| `/session-config [일수]` | 세션 보존 기간 커스텀 설정 |
+When using Claude Code in the CLI, your context is lost when the session ends.
+This tool **saves your session progress, TODOs, and key context as markdown** so you can pick up right where you left off.
 
 ---
 
-## 📦 설치
+## Features
 
-한 번 설치하면 **모든 프로젝트**에서 슬래시커맨드를 사용할 수 있습니다.
+| Command | Description |
+|---------|-------------|
+| `/save-session` | Save the current session as a markdown file |
+| `/remind-last-session` | Load the most recent session memory |
+| `/remind-custom [filename]` | Load a specific session file |
+| `/remember-forever [content]` | Save permanent notes referenced in every session |
+| `/session-config [days]` | Configure session retention period |
+
+---
+
+## Installation
+
+Install once, use in **every project**.
 
 ```bash
 git clone https://github.com/freeftr/GetLastMemo.git
@@ -29,9 +29,9 @@ cd GetLastMemo
 ./install.sh
 ```
 
-이 스크립트는 `~/.claude/commands/`에 커맨드 파일을 복사합니다.
+This copies the command files to `~/.claude/commands/`.
 
-### 수동 설치
+### Manual install
 
 ```bash
 mkdir -p ~/.claude/commands
@@ -40,92 +40,90 @@ cp .claude/commands/*.md ~/.claude/commands/
 
 ---
 
-## 🗂️ 디렉토리 구조
+## Directory Structure
 
 ```
-~/.claude/commands/                  ← 글로벌 설치 (한 번)
+~/.claude/commands/                  <- Global install (one-time)
   save-session.md
   remind-last-session.md
   remind-custom.md
   remember-forever.md
   session-config.md
 
-{각 프로젝트}/session-memories/      ← 프로젝트별 자동 생성
-  .config.json                       ← 보존 기간 설정
-  forever.md                         ← 영구 기억
-  2025-03-06_14-30-00.md             ← 세션 파일
+{each project}/session-memories/     <- Per-project, auto-created
+  .config.json                       <- Retention period config
+  forever.md                         <- Permanent notes
+  2025-03-06_14-30-00.md             <- Session files
   ...
 ```
 
-`session-memories/`는 처음 `/save-session`을 실행할 때 자동으로 생성됩니다.
+`session-memories/` is automatically created when you first run `/save-session`.
 
 ---
 
-## 📖 사용 예시
+## Usage
 
-### 세션 시작할 때
+### Starting a session
 ```
 /remind-last-session
 ```
-→ 지난 세션에서 무엇을 했는지, 다음에 할 일이 무엇인지 바로 파악
+> Instantly recall what you did last time and what's next
 
-### 세션 마칠 때
+### Ending a session
 ```
 /save-session
 ```
-→ Claude가 이번 세션 내용을 요약해서 `session-memories/2025-03-06_18-00-00.md`로 저장
+> Claude summarizes the session and saves it as `session-memories/2025-03-06_18-00-00.md`
 
-### 특정 날짜 세션 불러오기
+### Loading a specific session
 ```
 /remind-custom 2025-03-01_10-00-00
 ```
 
-### 항상 기억해야 할 것 등록
+### Saving permanent notes
 ```
-/remember-forever 이 프로젝트는 항상 Node.js 22 LTS 사용. pnpm 패키지 매니저 필수.
+/remember-forever Always use Node.js 22 LTS. pnpm required.
 ```
-→ `forever.md`에 누적 저장됨. `/save-session`, `/remind-last-session` 호출 시 항상 함께 출력
+> Appended to `forever.md`. Always displayed with `/save-session` and `/remind-last-session`
 
-### 보존 기간 변경
+### Changing retention period
 ```
 /session-config 30
 ```
-→ 최근 30일치 세션 보관 (기본값: 10일)
+> Keep the last 30 days of sessions (default: 10 days)
 
 ---
 
-## 📄 세션 파일 형식
-
-저장되는 마크다운 파일 형식:
+## Session File Format
 
 ```markdown
-# 세션 메모리
-**날짜**: 2025-03-06
-**저장 시각**: 18:00:00
+# Session Memory
+**Date**: 2025-03-06
+**Saved**: 18:00:00
 
 ---
 
-## ✅ 이번 세션에서 한 일
-- 사용자 인증 API 엔드포인트 구현 완료
-- JWT 토큰 검증 로직 버그 수정
+## What was done
+- Implemented user auth API endpoints
+- Fixed JWT token validation bug
 
-## 📋 다음에 해야 할 일
-- 이메일 인증 플로우 구현
-- 테스트 코드 작성 (auth.test.ts)
+## What to do next
+- Implement email verification flow
+- Write tests (auth.test.ts)
 
-## ⚠️ 필수 참고 사항
-- DB_HOST 환경변수는 .env.local에서 관리
-- users 테이블 마이그레이션 아직 미적용 상태
+## Important notes
+- DB_HOST env var is managed in .env.local
+- Users table migration not yet applied
 
-## 🔑 다음 세션을 위한 핵심 정보
-- 작업 중인 파일: src/api/auth/login.ts
-- 현재 브랜치: feature/user-auth
-- 막힌 부분: refresh token rotation 로직
+## Key context for next session
+- Working file: src/api/auth/login.ts
+- Current branch: feature/user-auth
+- Stuck on: refresh token rotation logic
 ```
 
 ---
 
-## ⚙️ 설정 파일
+## Configuration
 
 `session-memories/.config.json`:
 
@@ -136,34 +134,34 @@ cp .claude/commands/*.md ~/.claude/commands/
 }
 ```
 
-- `retention_days`: 세션 파일 보존 기간 (일). `/session-config` 커맨드로 변경 가능
-- 기간이 지난 세션은 `/save-session` 시 자동 삭제됨
+- `retention_days`: How long to keep session files (days). Change with `/session-config`
+- Expired sessions are auto-deleted when `/save-session` runs
 
 ---
 
-## 🔒 보존 정책
+## Retention Policy
 
-- 세션 파일은 **`retention_days`가 지난 것만** 자동 삭제됩니다
-- `forever.md`는 자동 삭제 대상에서 제외됩니다
-- 파일을 직접 삭제하고 싶으면 자유롭게 삭제하세요
-
----
-
-## 💡 팁
-
-- **세션 시작 루틴**: Claude Code를 열면 항상 `/remind-last-session`으로 시작하세요
-- **세션 종료 루틴**: 작업 마무리 전 `/save-session`으로 저장하세요
-- **팀 공유**: `session-memories/`를 `.gitignore`에 추가해 개인 기억은 로컬에만 보관하세요
-- **프로젝트별 설정**: 프로젝트마다 `retention_days`를 다르게 설정할 수 있습니다
+- Session files older than `retention_days` are automatically deleted
+- `forever.md` is excluded from auto-deletion
+- You can freely delete any files manually
 
 ---
 
-## 🤝 기여
+## Tips
 
-PR과 이슈 환영합니다!
+- **Start routine**: Always begin with `/remind-last-session` when opening Claude Code
+- **End routine**: Run `/save-session` before wrapping up
+- **Team projects**: Add `session-memories/` to `.gitignore` to keep memories local
+- **Per-project config**: Each project can have its own `retention_days` setting
 
 ---
 
-## 📜 라이선스
+## Contributing
+
+PRs and issues are welcome!
+
+---
+
+## License
 
 MIT
