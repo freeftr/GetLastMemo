@@ -1,4 +1,4 @@
-# session-memory-for-claude
+# GetLastMemo for Claude Code
 
 > Save and restore Claude Code session memory across conversations using slash commands
 
